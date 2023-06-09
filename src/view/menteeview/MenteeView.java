@@ -1,6 +1,6 @@
 package view.menteeview;
 
-import view.LoginFrame;
+import controller.MenteeController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +9,12 @@ import java.awt.event.ActionListener;
 
 public class MenteeView extends JFrame implements ActionListener{
     private JLabel label;
-    public MenteeView(){
+    private MenteeController menteeController;
+
+    public MenteeView(MenteeController menteeController){
+        this.menteeController = menteeController;
+
+        setVisible(true);
         setTitle("Button Example");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -23,7 +28,7 @@ public class MenteeView extends JFrame implements ActionListener{
         buttonPanel.add(button1);
 
         // 버튼 2
-        JButton button2 = new JButton("내 멘토에게 글 작성");
+        JButton button2 = new JButton("운동 방법 조회");
         button2.addActionListener(this);
         buttonPanel.add(button2);
 
@@ -43,7 +48,7 @@ public class MenteeView extends JFrame implements ActionListener{
         buttonPanel.add(button5, BorderLayout.SOUTH);
 
         // 버튼 6
-        JButton button6 = new JButton("답장 조회");
+        JButton button6 = new JButton("식단 조회");
         button6.addActionListener(this);
         buttonPanel.add(button6, BorderLayout.SOUTH);
 
@@ -58,7 +63,6 @@ public class MenteeView extends JFrame implements ActionListener{
         setPreferredSize(new Dimension(400, 300));
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
     }
 
     @Override
@@ -66,28 +70,28 @@ public class MenteeView extends JFrame implements ActionListener{
         if (e.getActionCommand().equals("내 멘토 보기")) {
             label.setText("내 멘토 보기 clicked");
             dispose();
-            new MyMentorListFrame();
-        } else if (e.getActionCommand().equals("내 멘토에게 글 작성")) {
-            label.setText("내 멘토에게 글 작성 clicked");
+            menteeController.goMyMentorListFrame();
+        } else if (e.getActionCommand().equals("운동 방법 조회")) {
+            label.setText("운동 방법 조회");
             dispose();
-            new BoardFrame();
+            menteeController.goReadExerciseProgramFrame();
         } else if (e.getActionCommand().equals("전체 멘토 목록 보기")) {
             label.setText("전체 멘토 목록 보기 clicked");
             dispose();
-            AllMentorListFrame mentorListFrame = new AllMentorListFrame();
+            menteeController.goAllMentorListFrame();
         }else if(e.getActionCommand().equals("마이페이지")){
             label.setText("마이페이지 clicked");
             dispose();
-            new MenteeMyPageFrame();
+            menteeController.goMenteeMypageFrmae();
         }else if(e.getActionCommand().equals("로그아웃")){
             label.setText("로그아웃 clicked");
             dispose();
-            new LoginFrame();
+            menteeController.goLoginFrame();
             JOptionPane.showMessageDialog(null, "로그아웃 되었습니다.");
-        }else if(e.getActionCommand().equals("답장 조회")){
-            label.setText("답장 조회 clicked");
+        }else if(e.getActionCommand().equals("식단 조회")){
+            label.setText("식단 조회 clicked");
+            menteeController.goReadDietProgramFrame();
             dispose();
-            new MentorReplyFrame();
         }
     }
 }

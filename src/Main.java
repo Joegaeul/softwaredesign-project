@@ -1,10 +1,12 @@
-import view.LoginFrame;
-import view.menteeview.MenteeView;
-import view.mentorview.MenteeListFrame;
+import controller.MemberController;
+import model.Repository;
+import view.memberview.LoginFrame;
 
 public class Main {
     public static void main(String[] args) {
+        Repository repository = new Repository();
+        MemberController memberController = new MemberController(repository);
 
-        new LoginFrame();
+        LoginFrame loginFrame = new LoginFrame(memberController);
     }
 }

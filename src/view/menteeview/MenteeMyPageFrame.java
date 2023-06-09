@@ -1,16 +1,18 @@
 package view.menteeview;
+import controller.MenteeController;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class MenteeMyPageFrame extends JFrame {
+public class MenteeMyPageFrame extends JFrame implements ActionListener {
 
-    private JTextField heightField, weightField, fatField, muscleField;
+    private JTextField heightField, weightField, muscleField;
+    private MenteeController menteeController;
 
-    public MenteeMyPageFrame() {
-        initGUI();
-    }
-
-    private void initGUI() {
+    public MenteeMyPageFrame(MenteeController menteeController) {
+        this.menteeController = menteeController;
 
         // 인바디 정보 입력 패널
         JPanel bodyInfoPanel = new JPanel(new GridLayout(4, 2));
@@ -26,11 +28,6 @@ public class MenteeMyPageFrame extends JFrame {
         bodyInfoPanel.add(weightLabel);
         bodyInfoPanel.add(weightField);
 
-        JLabel fatLabel = new JLabel("체지방률(%): ");
-        fatField = new JTextField(10);
-        bodyInfoPanel.add(fatLabel);
-        bodyInfoPanel.add(fatField);
-
         JLabel muscleLabel = new JLabel("근육량(kg): ");
         muscleField = new JTextField(10);
         bodyInfoPanel.add(muscleLabel);
@@ -40,17 +37,7 @@ public class MenteeMyPageFrame extends JFrame {
 
         // 인바디 정보 수정 버튼
         JButton updateButton = new JButton("수정");
-        updateButton.addActionListener(e -> {
-            String height = heightField.getText();
-            String weight = weightField.getText();
-            String fat = fatField.getText();
-            String muscle = muscleField.getText();
-
-            // TODO: 입력된 인바디 정보를 서버에 전송하여 저장하는 코드 작성
-            JOptionPane.showMessageDialog(null, "인바디 정보가 수정되었습니다.");
-            dispose();
-            new MenteeView();
-        });
+        updateButton.addActionListener(this);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(updateButton);
@@ -59,5 +46,24 @@ public class MenteeMyPageFrame extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getActionCommand().equals("수정")) {
+            try {
+                Double height = Double.parseDouble(heightField.getText());
+                Double weight = Double.parseDouble(weightField.getText());
+                Double muscle = Double.parseDouble(muscleField.getText());
+
+                // 입력된 인바디 정보 저장
+                menteeController.updateMyPage(height, weight, muscle);
+                JOptionPane.showMessageDialog(null, "인바디 정보가 수정되었습니다.");
+                dispose();
+                menteeController.goMenteeView();
+            }catch(NumberFormatException a){
+                JOptionPane.showMessageDialog(null, "정보를 잘못 입력했습니다.");
+            }
+        }
     }
 }
